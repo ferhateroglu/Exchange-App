@@ -43,7 +43,9 @@ namespace Exchange_App
             this.label4 = new System.Windows.Forms.Label();
             this.txtFiyat = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -60,7 +62,7 @@ namespace Exchange_App
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(178)))), ((int)(((byte)(8)))), ((int)(((byte)(55)))));
-            this.panel1.Location = new System.Drawing.Point(293, 116);
+            this.panel1.Location = new System.Drawing.Point(306, 118);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(254, 4);
@@ -70,7 +72,7 @@ namespace Exchange_App
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 8.059701F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label2.Location = new System.Drawing.Point(289, 69);
+            this.label2.Location = new System.Drawing.Point(302, 71);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 20);
@@ -87,7 +89,7 @@ namespace Exchange_App
             "ARPA",
             "BUĞDAY",
             "PAMUK"});
-            this.cmbUrun.Location = new System.Drawing.Point(293, 92);
+            this.cmbUrun.Location = new System.Drawing.Point(306, 94);
             this.cmbUrun.Name = "cmbUrun";
             this.cmbUrun.Size = new System.Drawing.Size(254, 28);
             this.cmbUrun.TabIndex = 25;
@@ -96,7 +98,7 @@ namespace Exchange_App
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(178)))), ((int)(((byte)(8)))), ((int)(((byte)(55)))));
-            this.panel2.Location = new System.Drawing.Point(293, 167);
+            this.panel2.Location = new System.Drawing.Point(306, 169);
             this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(254, 4);
@@ -107,7 +109,7 @@ namespace Exchange_App
             this.txtMiktar.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.txtMiktar.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtMiktar.Font = new System.Drawing.Font("Century Gothic", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.txtMiktar.Location = new System.Drawing.Point(293, 149);
+            this.txtMiktar.Location = new System.Drawing.Point(306, 151);
             this.txtMiktar.Name = "txtMiktar";
             this.txtMiktar.Size = new System.Drawing.Size(254, 21);
             this.txtMiktar.TabIndex = 29;
@@ -116,7 +118,7 @@ namespace Exchange_App
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 8.059701F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label3.Location = new System.Drawing.Point(289, 126);
+            this.label3.Location = new System.Drawing.Point(302, 128);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 20);
@@ -129,7 +131,7 @@ namespace Exchange_App
             this.btnAl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAl.Font = new System.Drawing.Font("Century Gothic", 10.74627F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnAl.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnAl.Location = new System.Drawing.Point(290, 266);
+            this.btnAl.Location = new System.Drawing.Point(303, 268);
             this.btnAl.Margin = new System.Windows.Forms.Padding(4);
             this.btnAl.Name = "btnAl";
             this.btnAl.Size = new System.Drawing.Size(128, 32);
@@ -144,13 +146,14 @@ namespace Exchange_App
             this.btnSat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSat.Font = new System.Drawing.Font("Century Gothic", 10.74627F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnSat.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnSat.Location = new System.Drawing.Point(422, 266);
+            this.btnSat.Location = new System.Drawing.Point(435, 268);
             this.btnSat.Margin = new System.Windows.Forms.Padding(4);
             this.btnSat.Name = "btnSat";
             this.btnSat.Size = new System.Drawing.Size(125, 32);
             this.btnSat.TabIndex = 31;
             this.btnSat.Text = "SAT";
             this.btnSat.UseVisualStyleBackColor = false;
+            this.btnSat.Click += new System.EventHandler(this.btnSat_Click);
             // 
             // dataGridView1
             // 
@@ -167,7 +170,7 @@ namespace Exchange_App
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBox1.Location = new System.Drawing.Point(293, 182);
+            this.checkBox1.Location = new System.Drawing.Point(306, 184);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(99, 20);
             this.checkBox1.TabIndex = 33;
@@ -179,7 +182,7 @@ namespace Exchange_App
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 8.059701F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label4.Location = new System.Drawing.Point(289, 205);
+            this.label4.Location = new System.Drawing.Point(302, 207);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 20);
@@ -192,7 +195,7 @@ namespace Exchange_App
             this.txtFiyat.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.txtFiyat.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFiyat.Font = new System.Drawing.Font("Century Gothic", 9.134328F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.txtFiyat.Location = new System.Drawing.Point(293, 228);
+            this.txtFiyat.Location = new System.Drawing.Point(306, 230);
             this.txtFiyat.Name = "txtFiyat";
             this.txtFiyat.Size = new System.Drawing.Size(254, 21);
             this.txtFiyat.TabIndex = 29;
@@ -202,17 +205,30 @@ namespace Exchange_App
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(178)))), ((int)(((byte)(8)))), ((int)(((byte)(55)))));
-            this.panel3.Location = new System.Drawing.Point(293, 246);
+            this.panel3.Location = new System.Drawing.Point(306, 248);
             this.panel3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(254, 4);
             this.panel3.TabIndex = 30;
             this.panel3.Visible = false;
             // 
+            // dataGridView2
+            // 
+            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(845, 521);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowHeadersWidth = 57;
+            this.dataGridView2.RowTemplate.Height = 24;
+            this.dataGridView2.Size = new System.Drawing.Size(24, 11);
+            this.dataGridView2.TabIndex = 34;
+            this.dataGridView2.Visible = false;
+            // 
             // UserControlAlimSatim
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnSat);
@@ -230,6 +246,7 @@ namespace Exchange_App
             this.Name = "UserControlAlimSatim";
             this.Size = new System.Drawing.Size(872, 535);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,5 +268,6 @@ namespace Exchange_App
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtFiyat;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }

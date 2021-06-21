@@ -78,6 +78,61 @@ namespace Exchange_App
             MessageBox.Show("Alım işlemi başarılı");
         }
 
+        private void btnSat_Click(object sender, EventArgs e)
+        {
+            baglanti.Open();
+            SqlCommand komut = new SqlCommand("select kullaniciID from EmirTablo where ogeID=@p1 and ogeFiyat=@p2", baglanti);
+            komut.Parameters.AddWithValue("@p1",ogeID);
+            komut.Parameters.AddWithValue("@p2", txtFiyat.Text);
+            string id = komut.ExecuteScalar().ToString();
+            baglanti.Close();
+            if (id != null)
+            {
+                DataTable tabloEmirler = new DataTable();
+                baglanti.Open();
+                SqlDataAdapter da = new SqlDataAdapter("select Et.kullaniciID,et.ogeID,et.ogeFiyat,et.ogeMiktar,ko.ogeMiktar  from Kullanicilar K inner join EmirTablo Et on K.kullaniciID=et.kullaniciID inner join KullaniciOgeleri Ko on K.kullaniciID=Ko.kullaniciID where (Ko.ogeID=4 and Et.kullaniciID=@p2) or (Ko.ogeID=@p3 and Et.kullaniciID=@p4)", baglanti);
+                da.SelectCommand.Parameters.AddWithValue("@p2", id);
+                da.SelectCommand.Parameters.AddWithValue("@p3", ogeID);
+                da.SelectCommand.Parameters.AddWithValue("@p4", id);
+
+                da.Fill(tabloEmirler);
+                baglanti.Close();
+                dataGridView2.DataSource = tabloEmirler;
+                string ogeID2, ogeFiyat2, alinacakMiktar2, bakiye2, ogeMevcutMiktar;
+                //alici bilgileri
+                ogeID2 = dataGridView2.Rows[0].Cells[1].Value.ToString();
+                ogeFiyat2 = dataGridView2.Rows[0].Cells[2].Value.ToString();
+                alinacakMiktar2 = dataGridView2.Rows[0].Cells[3].Value.ToString();
+                ogeMevcutMiktar = dataGridView2.Rows[0].Cells[4].Value.ToString();
+                bakiye2 = dataGridView2.Rows[1].Cells[4].Value.ToString();
+                double alisverisTutar2 =Convert.ToDouble(alinacakMiktar2) * Convert.ToDouble(ogeFiyat2);
+                bakiye2 =(Convert.ToDouble(bakiye2) - Convert.ToDouble(alisverisTutar2)-(alisverisTutar2/100)).ToString();
+                ogeMevcutMiktar = (Convert.ToDouble(ogeMevcutMiktar) + Convert.ToDouble(alinacakMiktar2)).ToString();
+                //satici bilgi
+                aliciBilgiGetir();
+                aliciBakiye = (Convert.ToDouble(aliciBakiye) + alisverisTutar2).ToString();
+                AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) - Convert.ToDouble(alinacakMiktar2)).ToString();
+
+                bilgiGuncelle(FrmLogin.id, AliciUrunMiktar, aliciBakiye);//satici
+                bilgiGuncelle(id, ogeMevcutMiktar, bakiye2);
+                listele();
+                baglanti.Open();
+                SqlCommand komutsil = new SqlCommand("delete from EmirTablo where kullaniciID=@p1 and ogeID=@p2", baglanti);
+                komutsil.Parameters.AddWithValue("@p1",id);
+                komutsil.Parameters.AddWithValue("@p2",ogeID2);
+                komutsil.ExecuteNonQuery();
+                baglanti.Close();
+                MessageBox.Show("Yeni Fiyattan satış işlemi gerçekleşti!");
+            }
+            else
+            {
+                MessageBox.Show("Ürün Fiyati Değiştirildi");
+            }
+
+            
+        }
+
+
         private void komisyonHesapla()
         {
             double komisyon = alisverisTutar / 100;
@@ -200,8 +255,6 @@ namespace Exchange_App
             dataGridView1.DataSource = dt;
             baglanti.Close();
         }
-
-
 
 
         //Buğday Listeleme
