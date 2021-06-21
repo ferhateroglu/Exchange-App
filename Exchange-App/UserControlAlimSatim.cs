@@ -15,6 +15,7 @@ namespace Exchange_App
     {
         string aliciBakiye, AliciUrunMiktar, saticiBakiye, saticiUrunMiktar,ogeID;
         double alisverisTutar;
+        DataTable dt = new DataTable();
 
         public UserControlAlimSatim()
         {
@@ -71,6 +72,10 @@ namespace Exchange_App
                     raporEkle(saticiStok);
                 }
             }
+            txtMiktar.Clear();
+            txtFiyat.Clear();
+            checkBox1.Checked = false;
+            MessageBox.Show("Alım işlemi başarılı");
         }
 
         private void komisyonHesapla()
@@ -124,6 +129,7 @@ namespace Exchange_App
         // Comboboxtaki ürün seçime göre satıcıları listeler
         private void cmbUrun_SelectedIndexChanged(object sender, EventArgs e)
         {
+            dt.Clear();
             if(cmbUrun.SelectedIndex == 0)
             {
                 arpaListele();
@@ -144,6 +150,7 @@ namespace Exchange_App
 
         private void listele()
         {
+            dt.Clear();
             if (ogeID == "1")
             {
                 arpaListele();
@@ -158,11 +165,34 @@ namespace Exchange_App
             }
         }
 
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked == true)
+            {
+                txtFiyat.Visible = true;
+                label4.Visible = true;
+                panel3.Visible = true;
+            }
+            else
+            {
+                txtFiyat.Visible = false;
+                label4.Visible = false;
+                panel3.Visible = false;
+            }
+        }
+
+        private void txtFiyat_TextChanged(object sender, EventArgs e)
+        {
+            DataView dv = dt.DefaultView;
+            dv.RowFilter = "ogeFiyat LIKE '" + txtFiyat.Text + "%'";
+            dataGridView1.DataSource = dv;
+        }
+
         //Arpa listeleme
         private void arpaListele()
         {
             string kullaniciId = FrmLogin.id;
-            DataTable dt = new DataTable();
             baglanti.Open();
             SqlDataAdapter da = new SqlDataAdapter("select K.kullaniciID,O.ogeAdi,Ko.ogeMiktar,Ko.ogeFiyat from Kullanicilar K inner join KullaniciOgeleri Ko on K.kullaniciID = Ko.kullaniciID inner join KullaniciTipleri Kt on Kt.kullaniciID = K.kullaniciID inner join Ogeler O on O.ogeID = Ko.ogeID where Kt.kullanicitipAdi = 'user' and O.ogeID = 1 and  K.kullaniciID !=@p1 and KO.ogeMiktar !=0 order by Ko.ogeFiyat asc", baglanti);
             da.SelectCommand.Parameters.AddWithValue("@p1", kullaniciId);
@@ -171,11 +201,13 @@ namespace Exchange_App
             baglanti.Close();
         }
 
+
+
+
         //Buğday Listeleme
         private void bugdayListele()
         {
-            string kullaniciId = FrmLogin.id;
-            DataTable dt = new DataTable();
+            string kullaniciId = FrmLogin.id;   
             baglanti.Open();
             SqlDataAdapter da = new SqlDataAdapter("select K.kullaniciID,O.ogeAdi,Ko.ogeMiktar,Ko.ogeFiyat from Kullanicilar K inner join KullaniciOgeleri Ko on K.kullaniciID = Ko.kullaniciID inner join KullaniciTipleri Kt on Kt.kullaniciID = K.kullaniciID inner join Ogeler O on O.ogeID = Ko.ogeID where Kt.kullanicitipAdi = 'user' and O.ogeID = 2 and  K.kullaniciID !=@p1 and KO.ogeMiktar !=0 order by Ko.ogeFiyat asc", baglanti);
             da.SelectCommand.Parameters.AddWithValue("@p1", kullaniciId);
@@ -188,7 +220,6 @@ namespace Exchange_App
         private void pamukListele()
         {
             string kullaniciId = FrmLogin.id;
-            DataTable dt = new DataTable();
             baglanti.Open();
             SqlDataAdapter da = new SqlDataAdapter("select K.kullaniciID,O.ogeAdi,Ko.ogeMiktar,Ko.ogeFiyat from Kullanicilar K inner join KullaniciOgeleri Ko on K.kullaniciID = Ko.kullaniciID inner join KullaniciTipleri Kt on Kt.kullaniciID = K.kullaniciID inner join Ogeler O on O.ogeID = Ko.ogeID where Kt.kullanicitipAdi = 'user' and O.ogeID = 3 and  K.kullaniciID !=@p1 and KO.ogeMiktar !=0 order by Ko.ogeFiyat asc", baglanti);
             da.SelectCommand.Parameters.AddWithValue("@p1", kullaniciId);
