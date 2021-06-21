@@ -27,55 +27,72 @@ namespace Exchange_App
         // Satın alma butonu
         private void btnAl_Click(object sender, EventArgs e)
         {
-            double alinacakMiktar = Convert.ToInt32(txtMiktar.Text);
-            double satisFiyat;
-            int saticiStok;
-            while (alinacakMiktar != 0)
+            int kontroll = dataGridView1.RowCount;
+            if (kontroll !=1)
             {
                 string saticiId = dataGridView1.Rows[0].Cells[0].Value.ToString();
-                satisFiyat = Convert.ToInt32(dataGridView1.Rows[0].Cells[3].Value);
-                saticiStok = Convert.ToInt32(dataGridView1.Rows[0].Cells[2].Value);
+                double alinacakMiktar = Convert.ToInt32(txtMiktar.Text);
+                double satisFiyat;
+                int saticiStok;
+                while (alinacakMiktar != 0)
+                {
+                    
+                    satisFiyat = Convert.ToInt32(dataGridView1.Rows[0].Cells[3].Value);
+                    saticiStok = Convert.ToInt32(dataGridView1.Rows[0].Cells[2].Value);
 
-                aliciBilgiGetir();
-                saticiBilgiGetir(saticiId);
-                if (aliciBakiye == "0")
-                {
-                    MessageBox.Show("yetersiz bakiye");
-                    alinacakMiktar = 0;
+                    aliciBilgiGetir();
+                    saticiBilgiGetir(saticiId);
+                    if (aliciBakiye == "0")
+                    {
+                        MessageBox.Show("yetersiz bakiye");
+                        alinacakMiktar = 0;
+                    }
+                    else if (alinacakMiktar <= saticiStok)
+                    {
+                        alisverisTutar = alinacakMiktar * satisFiyat;
+                        aliciBakiye = (Convert.ToDouble(aliciBakiye) - alisverisTutar).ToString();
+                        AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) + Convert.ToDouble(alinacakMiktar)).ToString();
+                        saticiBakiye = (Convert.ToDouble(saticiBakiye) + alisverisTutar).ToString();
+                        saticiUrunMiktar = (Convert.ToDouble(saticiUrunMiktar) - Convert.ToDouble(alinacakMiktar)).ToString();
+                        komisyonHesapla();
+                        bilgiGuncelle(FrmLogin.id, AliciUrunMiktar, aliciBakiye);
+                        bilgiGuncelle(saticiId, saticiUrunMiktar, saticiBakiye);
+                        listele();
+                        raporEkle(alinacakMiktar);
+                        alinacakMiktar = 0;
+                    }
+                    else if (alinacakMiktar > saticiStok)
+                    {
+                        alisverisTutar = saticiStok * satisFiyat;
+                        aliciBakiye = (Convert.ToDouble(aliciBakiye) - alisverisTutar).ToString();
+                        AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) + Convert.ToDouble(saticiStok)).ToString();
+                        saticiBakiye = (Convert.ToDouble(saticiBakiye) + alisverisTutar).ToString();
+                        saticiUrunMiktar = "0";
+                        alinacakMiktar -= saticiStok;
+                        //
+                        bilgiGuncelle(FrmLogin.id, AliciUrunMiktar, aliciBakiye);
+                        bilgiGuncelle(saticiId, saticiUrunMiktar, saticiBakiye);
+                        listele();
+                        raporEkle(saticiStok);
+                    }
                 }
-                else if(alinacakMiktar <= saticiStok)
-                {           
-                    alisverisTutar = alinacakMiktar * satisFiyat;
-                    aliciBakiye = (Convert.ToDouble(aliciBakiye) - alisverisTutar).ToString();
-                    AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) + Convert.ToDouble(alinacakMiktar)).ToString();
-                    saticiBakiye = (Convert.ToDouble(saticiBakiye) + alisverisTutar).ToString();
-                    saticiUrunMiktar = (Convert.ToDouble(saticiUrunMiktar) - Convert.ToDouble(alinacakMiktar)).ToString();
-                    komisyonHesapla();
-                    bilgiGuncelle(FrmLogin.id,AliciUrunMiktar,aliciBakiye);
-                    bilgiGuncelle(saticiId,saticiUrunMiktar,saticiBakiye);
-                    listele();
-                    raporEkle(alinacakMiktar);
-                    alinacakMiktar = 0;
-                }
-                else if( alinacakMiktar > saticiStok)
-                {
-                    alisverisTutar = saticiStok * satisFiyat;
-                    aliciBakiye = (Convert.ToDouble(aliciBakiye) - alisverisTutar).ToString();
-                    AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) + Convert.ToDouble(saticiStok)).ToString();
-                    saticiBakiye = (Convert.ToDouble(saticiBakiye) + alisverisTutar).ToString();
-                    saticiUrunMiktar = "0";
-                    alinacakMiktar -= saticiStok;
-                    //
-                    bilgiGuncelle(FrmLogin.id, AliciUrunMiktar, aliciBakiye);
-                    bilgiGuncelle(saticiId, saticiUrunMiktar, saticiBakiye);
-                    listele();
-                    raporEkle(saticiStok);
-                }
+                txtMiktar.Clear();
+                txtFiyat.Clear();
+                checkBox1.Checked = false;
+                MessageBox.Show("Alım işlemi başarılı");
             }
-            txtMiktar.Clear();
-            txtFiyat.Clear();
-            checkBox1.Checked = false;
-            MessageBox.Show("Alım işlemi başarılı");
+            else
+            {
+                baglanti.Open();
+                SqlCommand komut = new SqlCommand("insert into EmirTablo (kullaniciID,ogeID,ogeMiktar,ogeFiyat) values(@p1,@p2,@p3,@p4)", baglanti);
+                komut.Parameters.AddWithValue("@p1",FrmLogin.id);
+                komut.Parameters.AddWithValue("@p2",ogeID);
+                komut.Parameters.AddWithValue("@p3",txtMiktar.Text);
+                komut.Parameters.AddWithValue("@p4",txtFiyat.Text);
+                komut.ExecuteNonQuery();
+                baglanti.Close();
+                MessageBox.Show("İstenilen fiyattan satıcı bulunmamaktadır. Alım emriniz kaydedilmiştir.");
+            }
         }
 
         private void btnSat_Click(object sender, EventArgs e)
