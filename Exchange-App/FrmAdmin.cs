@@ -102,5 +102,12 @@ namespace Exchange_App
             varlikID = Convert.ToInt16(datagridview1.Rows[satir].Cells[2].Value);
             eklenecekMiktar = Convert.ToDouble(datagridview1.Rows[satir].Cells[3].Value);
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            FrmLogin frm = new FrmLogin();
+            frm.Show();
+            this.Close();
+        }
     }
 }

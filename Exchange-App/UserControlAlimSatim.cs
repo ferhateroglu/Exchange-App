@@ -14,7 +14,7 @@ namespace Exchange_App
     public partial class UserControlAlimSatim : UserControl
     {
         string aliciBakiye, AliciUrunMiktar, saticiBakiye, saticiUrunMiktar,ogeID;
-        int alisverisTutar;
+        double alisverisTutar;
 
         public UserControlAlimSatim()
         {
@@ -26,8 +26,8 @@ namespace Exchange_App
         // Satın alma butonu
         private void btnAl_Click(object sender, EventArgs e)
         {
-            int alinacakMiktar = Convert.ToInt32(txtMiktar.Text);
-            int satisFiyat;
+            double alinacakMiktar = Convert.ToInt32(txtMiktar.Text);
+            double satisFiyat;
             int saticiStok;
             while (alinacakMiktar != 0)
             {
@@ -43,33 +43,64 @@ namespace Exchange_App
                     alinacakMiktar = 0;
                 }
                 else if(alinacakMiktar <= saticiStok)
-                {
-                    
-                    alisverisTutar += alinacakMiktar * satisFiyat;
+                {           
+                    alisverisTutar = alinacakMiktar * satisFiyat;
                     aliciBakiye = (Convert.ToDouble(aliciBakiye) - alisverisTutar).ToString();
                     AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) + Convert.ToDouble(alinacakMiktar)).ToString();
-                    saticiBakiye = (Convert.ToInt32(saticiBakiye) + alisverisTutar).ToString();
+                    saticiBakiye = (Convert.ToDouble(saticiBakiye) + alisverisTutar).ToString();
                     saticiUrunMiktar = (Convert.ToDouble(saticiUrunMiktar) - Convert.ToDouble(alinacakMiktar)).ToString();
-                    alinacakMiktar = 0;
+                    komisyonHesapla();
                     bilgiGuncelle(FrmLogin.id,AliciUrunMiktar,aliciBakiye);
                     bilgiGuncelle(saticiId,saticiUrunMiktar,saticiBakiye);
                     listele();
+                    raporEkle(alinacakMiktar);
+                    alinacakMiktar = 0;
                 }
                 else if( alinacakMiktar > saticiStok)
                 {
-                    alisverisTutar += saticiStok * satisFiyat;
+                    alisverisTutar = saticiStok * satisFiyat;
                     aliciBakiye = (Convert.ToDouble(aliciBakiye) - alisverisTutar).ToString();
                     AliciUrunMiktar = (Convert.ToDouble(AliciUrunMiktar) + Convert.ToDouble(saticiStok)).ToString();
                     saticiBakiye = (Convert.ToDouble(saticiBakiye) + alisverisTutar).ToString();
                     saticiUrunMiktar = "0";
                     alinacakMiktar -= saticiStok;
+                    //
                     bilgiGuncelle(FrmLogin.id, AliciUrunMiktar, aliciBakiye);
                     bilgiGuncelle(saticiId, saticiUrunMiktar, saticiBakiye);
                     listele();
+                    raporEkle(saticiStok);
                 }
             }
         }
 
+        private void komisyonHesapla()
+        {
+            double komisyon = alisverisTutar / 100;
+            aliciBakiye = (Convert.ToDouble(aliciBakiye) - komisyon).ToString();
+            baglanti.Open();
+            SqlCommand komut = new SqlCommand("select ogeMiktar from KullaniciOgeleri where kullaniciID=6 and ogeID=4",baglanti);
+            string mevcutpara = komut.ExecuteScalar().ToString();
+            mevcutpara = mevcutpara.Replace(".", ",");
+            mevcutpara = (Convert.ToDouble(mevcutpara) + komisyon).ToString();
+            baglanti.Close();
+
+            baglanti.Open();
+            SqlCommand komutGuncelle = new SqlCommand("update KullaniciOgeleri set ogeMiktar=@p1 where kullaniciID=6 and ogeID=4", baglanti);
+            komutGuncelle.Parameters.AddWithValue("@p1", mevcutpara);
+            komutGuncelle.ExecuteNonQuery();
+            baglanti.Close();
+        }
+        private void raporEkle(double miktar)
+        {
+            baglanti.Open();
+            SqlCommand komut = new SqlCommand("insert into Rapor (kullaniciID,ogeID,miktar,tarih) values(@p1,@p2,@p3,@p4)", baglanti);
+            komut.Parameters.AddWithValue("@p1",FrmLogin.id);
+            komut.Parameters.AddWithValue("@p2",ogeID);
+            komut.Parameters.AddWithValue("@p3",miktar);
+            komut.Parameters.AddWithValue("@p4",DateTime.Now);
+            komut.ExecuteNonQuery();
+            baglanti.Close();
+        }
         private void bilgiGuncelle(string id,string urunMiktar,string para)
         {
             baglanti.Open();

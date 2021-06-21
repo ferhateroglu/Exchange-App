@@ -58,6 +58,7 @@ namespace Exchange_App
                 kurHesapla(sterlin);
                 adminOnayinaGonder("4");
             }
+            MessageBox.Show("Talebiniz admin onayına gönderildi");
         }
 
         private void adminOnayinaGonder(string ogeID)

@@ -148,7 +148,8 @@ namespace Exchange_App
             // lblSignUp
             // 
             this.lblSignUp.AutoSize = true;
-            this.lblSignUp.Location = new System.Drawing.Point(81, 365);
+            this.lblSignUp.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblSignUp.Location = new System.Drawing.Point(101, 365);
             this.lblSignUp.Name = "lblSignUp";
             this.lblSignUp.Size = new System.Drawing.Size(240, 20);
             this.lblSignUp.TabIndex = 25;

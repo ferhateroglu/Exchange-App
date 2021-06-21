@@ -32,9 +32,9 @@ namespace Exchange_App
         // Kayıt olma formunun açılması
         private void lblSignUp_Click(object sender, EventArgs e)
         {
-            FrmSignUp signUp = new FrmSignUp();
-            signUp.Show();
-            this.Close();
+            FrmSignUp frmSignUp = new FrmSignUp();
+            frmSignUp.Show();
+            this.Hide();
         }
 
         // Giriş Yapma butonu
